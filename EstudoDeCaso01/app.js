@@ -71,9 +71,35 @@ function renderizar() {
     linha.appendChild(acoes);
     tabela.appendChild(linha);
   });
-  
+  gerarRelatorios();
 }
 document.getElementById('salvar').addEventListener('click', function () { salvar(); });
 document.getElementById('cancelar').addEventListener('click', function () { cancelar(); });
 formulario.addEventListener('submit', function (evento) { evento.preventDefault(); salvar(); });
 renderizar();
+
+function gerarRelatorios() {
+  const saida = document.getElementById('relatorios');
+  const aprovados = alunos.filter(aluno => aluno.isAprovado());
+  const nomes = alunos.map(aluno => aluno.nome).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const media = campo => alunos.length
+    ? (alunos.reduce((soma, aluno) => soma + aluno[campo], 0) / alunos.length).toFixed(2)
+    : 'Sem alunos cadastrados';
+  const porCurso = alunos.reduce((totais, aluno) => {
+    totais[aluno.curso] += 1;
+    return totais;
+  }, { JavaScript: 0, Python: 0, Java: 0 });
+  saida.replaceChildren();
+  const linhas = [
+    'Aprovados: ' + (aprovados.map(aluno => aluno.toString()).join('; ') || 'Nenhum'),
+    'Média das notas: ' + media('notaFinal'),
+    'Média das idades: ' + media('idade'),
+    'Nomes em ordem alfabética: ' + (nomes.join(', ') || 'Nenhum'),
+    ...Object.entries(porCurso).map(([curso, quantidade]) => `${curso}: ${quantidade} aluno(s)`)
+  ];
+  linhas.forEach(texto => {
+    const paragrafo = document.createElement('p');
+    paragrafo.textContent = texto;
+    saida.appendChild(paragrafo);
+  });
+}
