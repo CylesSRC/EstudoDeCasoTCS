@@ -36,11 +36,7 @@ function cadastrar() {
   if (indiceEdicao === null) {
     funcionarios.push(new Funcionario(nome, idade, cargo, salario));
   } else {
-    const funcionario = funcionarios[indiceEdicao];
-    funcionario.nome = nome;
-    funcionario.idade = idade;
-    funcionario.cargo = cargo;
-    funcionario.salario = salario;
+    atualizar(indiceEdicao, nome, idade, cargo, salario);
   }
   cancelar();
   renderizar();
@@ -48,20 +44,30 @@ function cadastrar() {
 formulario.onsubmit = function (evento) { evento.preventDefault(); cadastrar(); };
 salvar.onclick = function () { cadastrar(); };
 
-function editar(indice) {
-  const funcionario = funcionarios[indice];
+// Antes: const buscar = function (indice) { return funcionarios[indice]; };
+// Depois: a arrow function retorna a expressão diretamente.
+const buscar = indice => funcionarios.find((funcionario, posicao) => posicao === indice);
+const atualizar = (indice, nome, idade, cargo, salario) => {
+  const funcionario = buscar(indice);
+  funcionario.nome = nome;
+  funcionario.idade = idade;
+  funcionario.cargo = cargo;
+  funcionario.salario = salario;
+};
+const editar = indice => {
+  const funcionario = buscar(indice);
   indiceEdicao = indice;
-  for (const campo of ['nome', 'idade', 'cargo', 'salario']) {
+  ['nome', 'idade', 'cargo', 'salario'].forEach(campo => {
     formulario.elements[campo].value = funcionario[campo];
-  }
+  });
   salvar.textContent = 'Salvar alterações';
   formulario.elements.nome.focus();
-}
-function excluir(indice) {
-  funcionarios.splice(indice, 1);
+};
+const excluir = indice => {
+  funcionarios = funcionarios.filter((funcionario, posicao) => posicao !== indice);
   cancelar();
   renderizar();
-}
+};
 document.getElementById('cancelar').onclick = function () { cancelar(); };
 
 function renderizar() {
