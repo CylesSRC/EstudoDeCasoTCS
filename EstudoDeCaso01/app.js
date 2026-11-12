@@ -30,7 +30,7 @@ function salvar() {
   else alunos.push(aluno);
   cancelar();
   renderizar();
-  
+  console.log(editando ? 'Aluno atualizado.' : 'Aluno cadastrado.');
 }
 function editar(indice) {
   const aluno = alunos[indice];
@@ -40,18 +40,17 @@ function editar(indice) {
   }
   document.getElementById('salvar').textContent = 'Salvar alterações';
   formulario.elements.nome.focus();
-  
+  console.log('Aluno selecionado para edição.');
 }
 function excluir(indice) {
   alunos.splice(indice, 1);
   cancelar();
   renderizar();
-  
+  console.log('Aluno excluído.');
 }
 function renderizar() {
   tabela.replaceChildren();
-  for (let indice = 0; indice < alunos.length; indice++) {
-    const aluno = alunos[indice];
+  alunos.forEach((aluno, indice) => {
     const linha = document.createElement('tr');
     for (const valor of [aluno.nome, aluno.idade, aluno.curso, aluno.notaFinal]) {
       const celula = document.createElement('td');
@@ -63,16 +62,18 @@ function renderizar() {
       const botao = document.createElement('button');
       botao.type = 'button';
       botao.textContent = acao;
-      botao.onclick = function () {
+      botao.addEventListener('click', function () {
         if (acao === 'Editar') editar(indice);
         else excluir(indice);
-      };
+      });
       acoes.appendChild(botao);
     }
     linha.appendChild(acoes);
     tabela.appendChild(linha);
-  }
+  });
   
 }
-formulario.onsubmit = function (evento) { evento.preventDefault(); salvar(); };
+document.getElementById('salvar').addEventListener('click', function () { salvar(); });
+document.getElementById('cancelar').addEventListener('click', function () { cancelar(); });
+formulario.addEventListener('submit', function (evento) { evento.preventDefault(); salvar(); });
 renderizar();

@@ -8,7 +8,7 @@
 <p><label>Idade: <input name="idade" type="number" min="1" step="1" required></label></p>
 <p><label>Curso: <select name="curso"><option>JavaScript</option><option>Python</option><option>Java</option></select></label></p>
 <p><label>Nota final: <input name="notaFinal" type="number" min="0" max="10" step="0.01" required></label></p>
-<button id="salvar" type="submit">Cadastrar</button><button type="button" onclick="cancelar()">Cancelar edição</button>
+<button id="salvar" type="button">Cadastrar</button><button id="cancelar" type="button">Cancelar edição</button>
 </form>
 <h2>Alunos cadastrados</h2>
 <table border="1"><thead><tr><th>Nome</th><th>Idade</th><th>Curso</th><th>Nota final</th><th>Ações</th></tr></thead><tbody id="alunos"></tbody></table>
