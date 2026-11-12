@@ -33,12 +33,36 @@ function cadastrar() {
   const idade = Number(formulario.elements.idade.value);
   const salario = Number(formulario.elements.salario.value);
   if (!nome || !cargo) { alert('Preencha nome e cargo.'); return; }
-  funcionarios.push(new Funcionario(nome, idade, cargo, salario));
+  if (indiceEdicao === null) {
+    funcionarios.push(new Funcionario(nome, idade, cargo, salario));
+  } else {
+    const funcionario = funcionarios[indiceEdicao];
+    funcionario.nome = nome;
+    funcionario.idade = idade;
+    funcionario.cargo = cargo;
+    funcionario.salario = salario;
+  }
   cancelar();
   renderizar();
 }
 formulario.onsubmit = function (evento) { evento.preventDefault(); cadastrar(); };
 salvar.onclick = function () { cadastrar(); };
+
+function editar(indice) {
+  const funcionario = funcionarios[indice];
+  indiceEdicao = indice;
+  for (const campo of ['nome', 'idade', 'cargo', 'salario']) {
+    formulario.elements[campo].value = funcionario[campo];
+  }
+  salvar.textContent = 'Salvar alterações';
+  formulario.elements.nome.focus();
+}
+function excluir(indice) {
+  funcionarios.splice(indice, 1);
+  cancelar();
+  renderizar();
+}
+document.getElementById('cancelar').onclick = function () { cancelar(); };
 
 function renderizar() {
   tabela.replaceChildren();
@@ -49,6 +73,18 @@ function renderizar() {
       td.textContent = valor;
       linha.appendChild(td);
     });
+    const acoes = document.createElement('td');
+    ['Editar', 'Excluir'].forEach(acao => {
+      const botao = document.createElement('button');
+      botao.type = 'button';
+      botao.textContent = acao;
+      botao.onclick = function () {
+        if (acao === 'Editar') editar(indice);
+        else excluir(indice);
+      };
+      acoes.appendChild(botao);
+    });
+    linha.appendChild(acoes);
     tabela.appendChild(linha);
   });
 }
