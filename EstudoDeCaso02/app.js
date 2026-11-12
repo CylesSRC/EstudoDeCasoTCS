@@ -93,5 +93,28 @@ function renderizar() {
     linha.appendChild(acoes);
     tabela.appendChild(linha);
   });
+  gerarRelatorios();
+}
+
+function gerarRelatorios() {
+  const acima = funcionarios.filter(funcionario => funcionario.salario > 5000);
+  const media = funcionarios.length
+    ? moeda.format(funcionarios.reduce((soma, funcionario) => soma + funcionario.salario, 0) / funcionarios.length)
+    : 'Sem funcionários cadastrados';
+  const cargos = [...new Set(funcionarios.map(funcionario => funcionario.cargo))];
+  const nomes = funcionarios.map(funcionario => funcionario.nome.toLocaleUpperCase('pt-BR'));
+  const linhas = [
+    'Salário maior que R$ 5.000: ' + (acima.map(funcionario => funcionario.toString()).join('; ') || 'Nenhum'),
+    'Média salarial: ' + media,
+    'Cargos únicos: ' + (cargos.join(', ') || 'Nenhum'),
+    'Nomes em maiúsculo: ' + (nomes.join(', ') || 'Nenhum')
+  ];
+  const saida = document.getElementById('relatorios');
+  saida.replaceChildren();
+  linhas.forEach(texto => {
+    const p = document.createElement('p');
+    p.textContent = texto;
+    saida.appendChild(p);
+  });
 }
 renderizar();
