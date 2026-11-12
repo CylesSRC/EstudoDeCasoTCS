@@ -1,3 +1,13 @@
+class Aluno {
+  constructor(nome, idade, curso, notaFinal) {
+    this.nome = nome;
+    this.idade = idade;
+    this.curso = curso;
+    this.notaFinal = notaFinal;
+  }
+  isAprovado() { return this.notaFinal >= 7; }
+  toString() { return `${this.nome}, ${this.idade} anos, ${this.curso}, nota ${this.notaFinal}`; }
+}
 const alunos = [];
 let indiceEdicao = null;
 const formulario = document.getElementById('formulario');
@@ -14,7 +24,7 @@ function salvar() {
   const idade = Number(formulario.elements.idade.value);
   const curso = formulario.elements.curso.value;
   const notaFinal = Number(formulario.elements.notaFinal.value);
-  const aluno = { nome, idade, curso, notaFinal };
+  const aluno = new Aluno(nome, idade, curso, notaFinal);
   const editando = indiceEdicao !== null;
   if (editando) alunos[indiceEdicao] = aluno;
   else alunos.push(aluno);
