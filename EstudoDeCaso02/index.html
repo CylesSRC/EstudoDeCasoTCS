@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Gestão de funcionários</title><script src="app.js" defer></script></head>
+<body>
+<h1>Gestão de funcionários</h1>
+<form id="formulario">
+<p><label>Nome: <input name="nome" type="text" required></label></p>
+<p><label>Idade: <input name="idade" type="number" min="1" step="1" required></label></p>
+<p><label>Cargo: <input name="cargo" type="text" required></label></p>
+<p><label>Salário: <input name="salario" type="number" min="0" step="0.01" required></label></p>
+<button id="salvar" type="button">Cadastrar</button>
+
+</form>
+<h2>Funcionários cadastrados</h2>
+<table border="1"><thead><tr><th>Nome</th><th>Idade</th><th>Cargo</th><th>Salário</th></tr></thead><tbody id="funcionarios"></tbody></table>
+
+</body></html>
